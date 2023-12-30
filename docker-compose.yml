@@ -1,0 +1,16 @@
+version: '3.8'
+
+networks:
+  macvlan_ipxe:
+    name: macvlan_ipxe
+    driver: macvlan
+    external: true
+
+services:
+  ipex-server-core:
+    container_name: ipxe-server-core
+    image: tsutomu/ipxe-server-core:${TAG_IPXE_SERVER_CORE}
+    privileged: true
+    networks:
+      - macvlan_ipxe
+    command: ["--dhcp-range=172.31.127.123,proxy"]
