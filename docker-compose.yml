@@ -13,4 +13,11 @@ services:
     privileged: true
     networks:
       - macvlan_ipxe
-    command: ["--dhcp-range=172.31.127.123,proxy"]
+    command: [${COMMAND_IPXE_SERVER_CORE}]
+
+  ipxe-image-server:
+    container_name: ipxe-image-server
+    image: tsutomu/ipxe-server-core:${TAG_IPXE_SERVER_CORE}
+    networks:
+      - macvlan_ipxe
+
