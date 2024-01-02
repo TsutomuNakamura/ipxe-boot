@@ -18,13 +18,17 @@ services:
     privileged: true
     networks:
       macvlan_ipxe:
-        ipv4_addresses: "172.31.2.11"
-    command: [${COMMAND_IPXE_SERVER_CORE}]
+        ipv4_address: "172.31.2.11"
+    command: ${COMMAND_IPXE_SERVER_CORE}
+    environment:
+      - IP_NEXT_SERVER=${IP_NEXT_SERVER}
 
   ipxe-image-server:
     container_name: ipxe-image-server
-    image: tsutomu/ipxe-server-core:${TAG_IPXE_SERVER_CORE}
+    image: tsutomu/ipxe-image-server:${TAG_IPXE_SERVER_CORE}
     networks:
       macvlan_ipxe:
-        ipv4_addresses: "172.31.2.12"
+        ipv4_address: "172.31.2.12"
+    volumes:
+      - ./os:/var/www/os
 
