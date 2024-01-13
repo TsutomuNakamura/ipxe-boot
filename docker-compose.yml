@@ -21,7 +21,8 @@ services:
         ipv4_address: "172.31.2.11"
     command: ${COMMAND_IPXE_SERVER_CORE}
     environment:
-      - IP_NEXT_SERVER=${IP_NEXT_SERVER}
+      - IP_TFTP_NEXT_SERVER=${IP_TFTP_NEXT_SERVER}
+      - IP_HTTP_NEXT_SERVER=${IP_HTTP_NEXT_SERVER}
 
   ipxe-image-server:
     container_name: ipxe-image-server
