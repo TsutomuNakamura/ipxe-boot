@@ -7,9 +7,9 @@ networks:
     external: true
     ipam:
       config:
-        - subnet: "172.31.0.0/16"
-          ip_range: "172.31.2.128/25"
-          gateway: "172.31.0.1"
+        - subnet: ${MACVLAN_IPXE_SUBNET}
+          ip_range: ${MACVLAN_IPXE_IP_RANGE}
+          gateway: ${MACVLAN_IPXE_GATEWAY}
 
 services:
   ipex-server-core:
