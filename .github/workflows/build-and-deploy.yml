@@ -86,7 +86,7 @@ jobs:
       - name: Push ipxe-boot drawio images to https://github.com/TsutomuNakamura/references/ipxe-boot
         uses: ad-m/github-push-action@master
         with:
-          #github_token: ${{ secrets.PAT_TOKEN }}
+          github_token: ${{ secrets.SSH_PRIVATE_KEY_TSUTOMNAKAMURA_REFERENCES }}
           repository: TsutomuNakamura/references
           directory: ./references
 
