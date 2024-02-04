@@ -80,6 +80,7 @@ jobs:
           cd ${GITHUB_WORKSPACE}/references
           git config --local user.email "github-action[bot]@TsutomuNakamura.ipxe-boot.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          git add .
           git commit -a -m "Generated drawio images of https://github.com/TsutomuNakamura/ipxe-boot by github-actions[bot]"
 
       - name: Push ipxe-boot drawio images to https://github.com/TsutomuNakamura/references/ipxe-boot
