@@ -30,7 +30,7 @@ jobs:
       - name: Check out the repo2
         uses: actions/checkout@v3
         with:
-          repository: TsutomuNakamura/references.git
+          repository: TsutomuNakamura/references
           path: references
 
       # Runs a set of commands using the runners shell
