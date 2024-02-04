@@ -27,12 +27,22 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
+      - name: Check out the repo2
+        uses: actions/checkout@v3
+        with:
+          repository: TsutomuNakamura/references.git
+          path: references
+
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
+          # Generate dbus-daemon
           dbus-uuidgen > /var/lib/dbus/machine-id
           mkdir -p /var/run/dbus
           dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address
+
+          # Export draw-io-files with generating display
           cd drawio
           xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless
-          find .
+          find . -maxdepth 5
+
