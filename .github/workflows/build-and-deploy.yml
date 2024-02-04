@@ -33,7 +33,6 @@ jobs:
           dbus-uuidgen > /var/lib/dbus/machine-id
           mkdir -p /var/run/dbus
           dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address
-          xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless
           cd drawio
-          /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless
+          xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless
           find .
