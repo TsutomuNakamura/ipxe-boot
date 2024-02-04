@@ -43,8 +43,8 @@ jobs:
               /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless \
               --output ${GITHUB_WORKSPACE}/artifact/TsutomuNakamura/ipxe-boot/${GITHUB_REF##*/} --format svg
 
-          # Copy output resources to TsutomuNakamura/references
-          find ${GITHUB_WORKSPACE}/artifact -name *.svg
+          # DEBUG
+          #find ${GITHUB_WORKSPACE}/artifact -name *.svg
 
       - name: Upload svg files that were outputted by drawio-exporter as artifact
         uses: actions/upload-artifact@master
@@ -71,17 +71,21 @@ jobs:
           name: drawio-artifact
           path: artifact
 
-      - name: Prepare to push drawio images to https://github.com/TsutomuNakamura/references
+      - name: Run a job to push drawio images to https://github.com/TsutomuNakamura/references
         run: |
-          find ${GITHUB_WORKSPACE}/artifact
-          #git config --local user.email "github-action[bot]@TsutomuNakamura.ipxe-boot.noreply.github.com"
-          #git config --local user.name "github-actions[bot]"
-          #git commit -a -m "Generated drawio images of https://github.com/TsutomuNakamura/ipxe-boot by github-actions[bot]"
+          # DEBUG
+          #find ${GITHUB_WORKSPACE}/artifact
 
-      #- name: Push ipxe-boot drawio images to https://github.com/TsutomuNakamura/references/ipxe-boot
-      #  uses: ad-m/github-push-action@master
-      #  with:
-      #    github_token: ${{ secrets.PAT_TOKEN }}
-      #    repository: TsutomuNakamura/references
-      #    directory: ./references
+          cp -a ${GITHUB_WORKSPACE}/artifact/* ${GITHUB_WORKSPACE}/references
+          cd ${GITHUB_WORKSPACE}/references
+          git config --local user.email "github-action[bot]@TsutomuNakamura.ipxe-boot.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Generated drawio images of https://github.com/TsutomuNakamura/ipxe-boot by github-actions[bot]"
+
+      - name: Push ipxe-boot drawio images to https://github.com/TsutomuNakamura/references/ipxe-boot
+        uses: ad-m/github-push-action@master
+        with:
+          #github_token: ${{ secrets.PAT_TOKEN }}
+          repository: TsutomuNakamura/references
+          directory: ./references
 
