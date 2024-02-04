@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
+        with:
+          path: ipxe-boot
 
       - name: Check out the repo2
         uses: actions/checkout@v3
@@ -45,5 +47,6 @@ jobs:
           cd drawio
           xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless
           find . -maxdepth 5
-          find / -name references
+          echo "find ${GITHUB_WORKSPACE} -maxdepth 5"
+          find ${GITHUB_WORKSPACE} -maxdepth 5
 
