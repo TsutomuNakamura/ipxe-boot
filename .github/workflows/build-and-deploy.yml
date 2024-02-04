@@ -40,7 +40,7 @@ jobs:
 
           # Export drawio images to the directory "TsutomuNakamura/ipxe-boot/<branch>" at https://github.com/TsutomuNakamura/references.
           xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' \
-              /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless \
+              /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless --scale 2 \
               --output ${GITHUB_WORKSPACE}/artifact/TsutomuNakamura/ipxe-boot/${GITHUB_REF##*/} --format svg
 
           # DEBUG
