@@ -65,6 +65,8 @@ jobs:
         with:
           repository: TsutomuNakamura/references
           path: references
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_TSUTOMNAKAMURA_REFERENCES }}
+          persist-credentials: true
 
       - uses: actions/download-artifact@master
         with:
@@ -86,7 +88,7 @@ jobs:
       - name: Push ipxe-boot drawio images to https://github.com/TsutomuNakamura/references/ipxe-boot
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.SSH_PRIVATE_KEY_TSUTOMNAKAMURA_REFERENCES }}
+          ssh: true
           repository: TsutomuNakamura/references
           directory: ./references
 
