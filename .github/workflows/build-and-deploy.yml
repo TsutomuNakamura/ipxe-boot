@@ -44,11 +44,22 @@ jobs:
           mkdir -p /var/run/dbus
           dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address
 
-          # Export draw-io-files with generating display
+          # Export drawio images to the directory "TsutomuNakamura/ipxe-boot/<branch>" at https://github.com/TsutomuNakamura/references.
           xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' \
               /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless \
               --output ${GITHUB_WORKSPACE}/references/TsutomuNakamura/ipxe-boot/${GITHUB_REF##*/} --format svg
 
           # Copy output resources to TsutomuNakamura/references
           find ${GITHUB_WORKSPACE}/references -maxdepth 5
+
+          git config --local user.email "github-action[bot]@TsutomuNakamura.ipxe-boot.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Generated drawio images of https://github.com/TsutomuNakamura/ipxe-boot by github-actions[bot]"
+
+      - name: Push ipxe-boot drawio images to https://github.com/TsutomuNakamura/references/ipxe-boot
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          repository: TsutomuNakamura/references
+          directory: ./references
 
