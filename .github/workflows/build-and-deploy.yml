@@ -39,13 +39,13 @@ jobs:
       - name: Run a multi-line script
         run: |
           # Generate dbus-daemon
-          dbus-uuidgen > /var/lib/dbus/machine-id
-          mkdir -p /var/run/dbus
-          dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address
+          #dbus-uuidgen > /var/lib/dbus/machine-id
+          #mkdir -p /var/run/dbus
+          #dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address
 
-          # Export draw-io-files with generating display
-          cd drawio
-          xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless
+          ## Export draw-io-files with generating display
+          #cd drawio
+          #xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless
           find . -maxdepth 5
           echo "find ${GITHUB_WORKSPACE} -maxdepth 5"
           find ${GITHUB_WORKSPACE} -maxdepth 5
