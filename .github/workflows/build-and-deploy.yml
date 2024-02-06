@@ -77,17 +77,17 @@ jobs:
         run: |
           # DEBUG
           #find ${GITHUB_WORKSPACE}/artifact
-
           cp -a ${GITHUB_WORKSPACE}/artifact/* ${GITHUB_WORKSPACE}/references
-          cd ${GITHUB_WORKSPACE}/references
 
       - name: Check if there are any changes
         run: |
+          cd ${GITHUB_WORKSPACE}/references
           git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Run a job to commit drawio images to https://github.com/TsutomuNakamura/references
         if: steps.verify_diff.outputs.changed == 'true'
         run: |
+          cd ${GITHUB_WORKSPACE}/references
           git config --local user.email "github-action[bot]@TsutomuNakamura.ipxe-boot.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
