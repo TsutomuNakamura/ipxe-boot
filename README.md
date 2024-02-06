@@ -2,6 +2,8 @@
 This is a repository to run containers `ipxe-server-core` and `ipxe-image-server`.
 They enables iPXE clients to boot and install OS.
 
+![Boot sequence of ipxe-boot](https://raw.githubusercontent.com/TsutomuNakamura/references/main/TsutomuNakamura/ipxe-boot/main/Diagrams-ipxe-boot-flow.svg "ipxe-boot sequence")
+
 ## Preparing configurations
 ### Set macvlan network (in .env)
 You should create macvlan that its segment is same as your local network.
