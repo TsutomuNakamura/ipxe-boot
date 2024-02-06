@@ -73,19 +73,28 @@ jobs:
           name: drawio-artifact
           path: artifact
 
-      - name: Run a job to push drawio images to https://github.com/TsutomuNakamura/references
+      - name: Copy resources to the target repository
         run: |
           # DEBUG
           #find ${GITHUB_WORKSPACE}/artifact
 
           cp -a ${GITHUB_WORKSPACE}/artifact/* ${GITHUB_WORKSPACE}/references
           cd ${GITHUB_WORKSPACE}/references
+
+      - name: Check if there are any changes
+        run: |
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Run a job to commit drawio images to https://github.com/TsutomuNakamura/references
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
           git config --local user.email "github-action[bot]@TsutomuNakamura.ipxe-boot.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
           git commit -a -m "Generated drawio images of https://github.com/TsutomuNakamura/ipxe-boot by github-actions[bot]"
 
       - name: Push ipxe-boot drawio images to https://github.com/TsutomuNakamura/references/ipxe-boot
+        if: steps.verify_diff.outputs.changed == 'true'
         uses: ad-m/github-push-action@master
         with:
           ssh: true
