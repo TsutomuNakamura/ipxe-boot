@@ -1,10 +1,10 @@
-<mxfile host="Electron" modified="2024-02-05T15:10:17.327Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="kSkJpOmm1zDmL5t4zDP4" version="21.6.8" type="device">
+<mxfile host="Electron" modified="2024-02-07T15:33:18.261Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="xe_dcniCqKekrcUq6lOC" version="21.6.8" type="device" pages="2">
   <diagram name="ipxe-boot-flow" id="waToT-_TQXdz1UbK6SKb">
-    <mxGraphModel dx="819" dy="774" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="1355" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#1A1A1A" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="6388oxwnZF46jZnA-1td-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1A1A1A;" vertex="1" parent="1">
+        <mxCell id="6388oxwnZF46jZnA-1td-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1A1A1A;" parent="1" vertex="1">
           <mxGeometry x="130" y="120" width="740" height="590" as="geometry" />
         </mxCell>
         <mxCell id="Em4UhEbblT2qE73hykcX-1" value="" style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#333333;strokeColor=#FFFFFF;" parent="1" vertex="1">
@@ -134,8 +134,25 @@
             <mxPoint x="310" y="470" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="6388oxwnZF46jZnA-1td-1" value="(0) Run docker-compose first.&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(1) Read variables from .env. iPXE server will find an IP of next-server when read it. docker-compose will boot iPXE server and image server after read it.&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(2) When a client has started, it will broadcast DHCP. iPXE server returns IP of client, IP of gateway etc and a URL of iPXE firmware if the client is PXE (not iPXE).&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(3) A client obtain a firmware of iPXE with TFTP. The firmware might be located in another server.&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(4) After the client rebooted as iPXE client, iPXE client will broadcast DHCP. iPXE server returns IP of client, IP of gateway etc and a URL of OS images.&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(5) Obtain iPXE script with HTTP or tftp etc. Image server returns an iPXE script and client will enter an iPXE boot menu.&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(6) iPXE client requests an OS image that the user has choosen on iPXE boot menu. The image server returns an image. A client will boot by using the image.&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#1A1A1A;align=left;fillColor=#1A1A1A;" vertex="1" parent="1">
+        <mxCell id="6388oxwnZF46jZnA-1td-1" value="(0) Run docker-compose first.&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(1) Read variables from .env. iPXE server will find an IP of next-server when read it. docker-compose will boot iPXE server and image server after read it.&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(2) When a client has started, it will broadcast DHCP. iPXE server returns IP of client, IP of gateway etc and a URL of iPXE firmware if the client is PXE (not iPXE).&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(3) A client obtain a firmware of iPXE with TFTP. The firmware might be located in another server.&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(4) After the client rebooted as iPXE client, iPXE client will broadcast DHCP. iPXE server returns IP of client, IP of gateway etc and a URL of OS images.&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(5) Obtain iPXE script with HTTP or tftp etc. Image server returns an iPXE script and client will enter an iPXE boot menu.&lt;/span&gt;&lt;br style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;(6) iPXE client requests an OS image that the user has choosen on iPXE boot menu. The image server returns an image. A client will boot by using the image.&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255); background-color: rgb(26, 26, 26);&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#1A1A1A;align=left;fillColor=#1A1A1A;" parent="1" vertex="1">
           <mxGeometry x="160" y="526" width="680" height="180" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="xwYk-zJRvcQZs3rr66Pk" name="StrategyToIncreaseSizeOfDisk">
+    <mxGraphModel dx="1434" dy="1355" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="LhS5DTISDE3lKSNTyqEx-1" value="comstorageXX" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="480" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="LhS5DTISDE3lKSNTyqEx-2" value="VG for Ceph&lt;br&gt;ceph-ffffffff-ffff-ffff-ffff-ffffffffffff" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="210" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="LhS5DTISDE3lKSNTyqEx-3" value="VG for Swift&lt;br&gt;swift-vg" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="330" y="210" width="180" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
