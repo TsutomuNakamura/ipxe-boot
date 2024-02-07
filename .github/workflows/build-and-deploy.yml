@@ -82,7 +82,9 @@ jobs:
       - name: Check if there are any changes
         run: |
           cd ${GITHUB_WORKSPACE}/references
-          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+          bytes_of_result=$(git status --porcelain | wc -c)
+          echo "bytes_of_result=${bytes_of_result}"
+          [ ${bytes_of_result} -ne 0 ] && echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Run a job to commit drawio images to https://github.com/TsutomuNakamura/references
         if: steps.verify_diff.outputs.changed == 'true'
