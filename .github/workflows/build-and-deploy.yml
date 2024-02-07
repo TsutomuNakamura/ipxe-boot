@@ -79,7 +79,9 @@ jobs:
           #find ${GITHUB_WORKSPACE}/artifact
           cp -a ${GITHUB_WORKSPACE}/artifact/* ${GITHUB_WORKSPACE}/references
 
+      # Strategy of committing resources can be see at https://stackoverflow.com/a/74325815
       - name: Check if there are any changes
+        id: verify_diff
         run: |
           cd ${GITHUB_WORKSPACE}/references
           bytes_of_result=$(git status --porcelain | wc -c)
