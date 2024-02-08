@@ -91,7 +91,7 @@ jobs:
           echo "> Result of git status from here >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
           echo "${result_of_git_status}"
           echo "< Result of git status to here <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-          bytes_of_result=$(echo "${result_of_git_status}" | wc -c)
+          bytes_of_result=$(echo -n "${result_of_git_status}" | wc -c)
           echo "bytes_of_result=${bytes_of_result}"
           [ ${bytes_of_result} -ne 0 ] && echo "changed=true" >> $GITHUB_OUTPUT
 
