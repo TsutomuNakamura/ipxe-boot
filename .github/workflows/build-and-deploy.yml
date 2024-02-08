@@ -76,8 +76,10 @@ jobs:
       - name: Copy resources to the target repository
         run: |
           # DEBUG
-          #find ${GITHUB_WORKSPACE}/artifact
-          rm -rf ${GITHUB_WORKSPACE}/references/*
+          echo "> Print files that were generated from here >>>>>>>>>>>>>>>>>>>>>>>>"
+          find ${GITHUB_WORKSPACE}/artifact -name *.svg
+          echo "< Print files that were generated to here <<<<<<<<<<<<<<<<<<<<<<<<<<"
+          rm -rf ${GITHUB_WORKSPACE}/references/TsutomuNakamura/ipxe-boot/*
           cp -a ${GITHUB_WORKSPACE}/artifact/* ${GITHUB_WORKSPACE}/references
 
       # Strategy of committing resources can be see at https://stackoverflow.com/a/74325815
@@ -85,7 +87,11 @@ jobs:
         id: verify_diff
         run: |
           cd ${GITHUB_WORKSPACE}/references
-          bytes_of_result=$(git status --porcelain | wc -c)
+          result_of_git_status="$(git status --porcelain)"
+          echo "> Result of git status from here >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+          echo "${result_of_git_status}"
+          echo "< Result of git status to here <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+          bytes_of_result=$(echo "${result_of_git_status}" | wc -c)
           echo "bytes_of_result=${bytes_of_result}"
           [ ${bytes_of_result} -ne 0 ] && echo "changed=true" >> $GITHUB_OUTPUT
 
