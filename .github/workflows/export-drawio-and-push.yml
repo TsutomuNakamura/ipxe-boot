@@ -1,0 +1,128 @@
+# This is a GitHub Actionses to push resources of drawio.
+# Refer to: https://github.com/TsutomuNakamura/my-github-actions
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  # Mappings were not expected in this area.
+  dest_repository_owner_name: "TsutomuNakamura"
+  dest_repository_name: "references"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container:
+      image: rlespinasse/drawio-export:v4.15.0
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Print variables will be used
+        run: |
+          # You can list GitHub Actionses variables with a command below.
+          # $ grep -oP '\$\{\{.*?\}\}' .github/workflows/docker-image.yml | sort | uniq
+          echo env.dest_repository_name=${{ env.dest_repository_name }}
+          echo env.dest_repository_owner_name=${{ env.dest_repository_owner_name }}
+          echo github.event.repository.name=${{ github.event.repository.name }}
+          echo github.event.repository.owner.name=${{ github.event.repository.owner.name }}
+
+      - name: Checkout ${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}
+        uses: actions/checkout@v4
+        with:
+          path: ${{ github.event.repository.name }}
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          # Generate dbus-daemon in ${{ github.event.repository.name }} repository
+          cd ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}/drawio
+          dbus-uuidgen > /var/lib/dbus/machine-id
+          mkdir -p /var/run/dbus
+          dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address
+
+          # Export drawio images to the directory of the destination repository
+          xvfb-run --auto-servernum --server-num=1 --server-args='-screen 0, 1920x1080x24' \
+              /opt/drawio-exporter/drawio-exporter --drawio-desktop-headless --scale 2 \
+              --output ${GITHUB_WORKSPACE}/artifact/${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}/${GITHUB_REF##*/} --format svg
+
+          # DEBUG
+          #find ${GITHUB_WORKSPACE}/artifact -name *.svg
+
+      - name: Upload svg files that were outputted by drawio-exporter as artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: drawio-artifact
+          path: artifact
+
+  push:
+    # The type of runner that the job will run on
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: bitnami/git
+
+    steps:
+      - name: Checkout ${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
+          path: ${{ env.dest_repository_name }}
+          # You have to register ssh private key to push resources to the destination.
+          # Refer to the document in https://github.com/TsutomuNakamura/my-github-actions/tree/main/export-drawio-and-push
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_TO_DESTINATION_REPOSITORY }}
+          persist-credentials: true
+
+      - uses: actions/download-artifact@master
+        with:
+          name: drawio-artifact
+          path: artifact
+
+      - name: Copy resources to the target repository
+        run: |
+          echo "> Print files that were generated from here >>>>>>>>>>>>>>>>>>>>>>>>"
+          find ${GITHUB_WORKSPACE}/artifact -name *.svg
+          echo "< Print files that were generated to here <<<<<<<<<<<<<<<<<<<<<<<<<<"
+          rm -rf ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}/${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}/*
+          cp -a ${GITHUB_WORKSPACE}/artifact/* ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}
+
+      - name: Check if there are some changes
+        id: verify_diff
+        run: |
+          cd ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}
+          result_of_git_status="$(git status --porcelain)"
+          echo "> Result of git status from here >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+          echo "${result_of_git_status}"
+          echo "< Result of git status to here <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+          bytes_of_result=$(echo -n "${result_of_git_status}" | wc -c)
+          echo "bytes_of_result=${bytes_of_result}"
+          [ ${bytes_of_result} -ne 0 ] && echo "changed=true" >> $GITHUB_OUTPUT || true
+
+      - name: Run a job to commit drawio images to https://github.com/${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          cd ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}
+          git config --local user.email "github-action[bot]@${{ github.event.repository.owner.name }}.${{ github.event.repository.name }}.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -a -m "Generated drawio images of https://github.com/${{ github.event.repository.owner.name }}/${{ github.event.repository.name }} by github-actions[bot]"
+
+      - name: Push ${{ github.event.repository.name }} drawio images to ${{ github.event.repository.owner.name }}/${{ github.event.repository.name }} in https://github.com/${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
+        if: steps.verify_diff.outputs.changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          ssh: true
+          repository: ${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
+          directory: ./${{ env.dest_repository_name }}
+
