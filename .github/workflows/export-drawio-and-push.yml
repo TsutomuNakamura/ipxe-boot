@@ -94,8 +94,9 @@ jobs:
           echo "> Print files that were generated from here >>>>>>>>>>>>>>>>>>>>>>>>"
           find ${GITHUB_WORKSPACE}/artifact -name *.svg
           echo "< Print files that were generated to here <<<<<<<<<<<<<<<<<<<<<<<<<<"
-          rm -rf ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}/${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}/*
-          cp -a ${GITHUB_WORKSPACE}/artifact/* ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}
+          mkdir -p ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}/drawio
+          rm -rf ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}/drawio/${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}/*
+          cp -a ${GITHUB_WORKSPACE}/artifact/* ${GITHUB_WORKSPACE}/${{ env.dest_repository_name }}/drawio/
 
       - name: Check if there are some changes
         id: verify_diff
