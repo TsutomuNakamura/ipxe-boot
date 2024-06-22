@@ -4,7 +4,9 @@ networks:
   macvlan_ipxe:
     name: macvlan_ipxe
     driver: macvlan
-    external: true
+    driver_opts:
+      parent: ${MACVLAN_IPXE_PARENT_INTERFACE}
+    external: false
     ipam:
       config:
         - subnet: ${MACVLAN_IPXE_SUBNET}
@@ -18,7 +20,7 @@ services:
     privileged: true
     networks:
       macvlan_ipxe:
-        ipv4_address: "172.31.2.11"
+        ipv4_address: ${IP_TFTP_NEXT_SERVER}
     command: ${COMMAND_IPXE_SERVER_CORE}
     environment:
       - IP_TFTP_NEXT_SERVER=${IP_TFTP_NEXT_SERVER}
@@ -29,7 +31,7 @@ services:
     image: "tsutomu/ipxe-image-server:${TAG_IPXE_SERVER_CORE}"
     networks:
       macvlan_ipxe:
-        ipv4_address: "172.31.2.12"
+        ipv4_address: ${IP_HTTP_NEXT_SERVER}
     volumes:
-      - ./os:/var/www/os
+      - ./os/images:/var/www/os/images
 
