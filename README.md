@@ -75,3 +75,17 @@ docker-compose up
 
 Press `Ctrl + c` if your want to stop containers.
 
+## Test iPXE boot with QEMU
+
+```bash
+mkdir -p /var/kvm/distros/test-ipxe-boot
+virt-install \
+  --name test-ipxe-boot \
+  --boot uefi \
+  --pxe \
+  --ram 16384 \
+  --os-variant=ubuntu24.04 \
+  --disk /var/kvm/distros/test-ipxe-boot/disk.img,size=16,bus=virtio,format=qcow2 \
+  --network bridge=br0
+```
+
