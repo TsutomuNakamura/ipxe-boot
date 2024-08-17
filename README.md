@@ -79,6 +79,7 @@ Press `Ctrl + c` if your want to stop containers.
 
 ```bash
 mkdir -p /var/kvm/distros/test-ipxe-boot
+# virt-install without specifiing mac address
 virt-install \
   --name test-ipxe-boot \
   --boot uefi \
@@ -87,5 +88,15 @@ virt-install \
   --os-variant=ubuntu24.04 \
   --disk /var/kvm/distros/test-ipxe-boot/disk.img,size=16,bus=virtio,format=qcow2 \
   --network bridge=br0
+
+# virt-install with specifiing mac address
+virt-install \
+  --name test-ipxe-boot \
+  --boot uefi \
+  --pxe \
+  --ram 16384 \
+  --os-variant=ubuntu24.04 \
+  --disk /var/kvm/distros/test-ipxe-boot/disk.img,size=16,bus=virtio,format=qcow2 \
+  --network bridge=br0,mac=52:54:ff:00:00:01
 ```
 
