@@ -67,7 +67,7 @@ IP_TFTP_NEXT_SERVER=172.31.2.11
 
 ## Run containers
 You can run containers with docker-compose.
-It will run containers `ipex-server-core` and `ipxe-image-server`.
+It will run containers `ipxe-server-core` and `ipxe-image-server`.
 
 ```
 docker-compose up

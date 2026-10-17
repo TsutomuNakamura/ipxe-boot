@@ -14,7 +14,7 @@ networks:
           gateway: ${MACVLAN_IPXE_GATEWAY}
 
 services:
-  ipex-server-core:
+  ipxe-server-core:
     container_name: ipxe-server-core
     image: "tsutomu/ipxe-server-core:${TAG_IPXE_SERVER_CORE}"
     privileged: true
