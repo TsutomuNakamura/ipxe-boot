@@ -28,7 +28,7 @@ services:
 
   ipxe-image-server:
     container_name: ipxe-image-server
-    image: "tsutomu/ipxe-image-server:${TAG_IPXE_SERVER_CORE}"
+    image: "tsutomu/ipxe-image-server:${TAG_IPXE_IMAGE_SERVER}"
     networks:
       macvlan_ipxe:
         ipv4_address: ${IP_HTTP_NEXT_SERVER}
