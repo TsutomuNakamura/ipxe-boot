@@ -62,7 +62,7 @@ This IP will be used a container `ipxe-image-server` and it should be in the net
 
 * .env
 ```
-IP_TFTP_NEXT_SERVER=172.31.2.11
+IP_HTTP_NEXT_SERVER=172.31.2.12
 ```
 
 ## Run containers
