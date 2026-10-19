@@ -1,1 +1,4 @@
 os/
+# Custom files for ipxe-image-server. They may contain passwords or SSH keys.
+etc/ipxe-image-server/*
+!etc/ipxe-image-server/README.md
