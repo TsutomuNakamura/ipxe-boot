@@ -103,6 +103,7 @@ Press `Ctrl + c` if your want to stop containers.
 * UEFI Secure Boot must be disabled, because `ipxe.efi` is not signed.
 
 ## Test iPXE boot with QEMU
+See [TESTING.md](TESTING.md) for a full test with a KVM VM, from booting iPXE to logging in to the installed OS.
 
 ```bash
 mkdir -p /var/kvm/distros/test-ipxe-boot
