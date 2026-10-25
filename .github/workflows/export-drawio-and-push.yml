@@ -70,8 +70,6 @@ jobs:
     # The type of runner that the job will run on
     needs: build
     runs-on: ubuntu-latest
-    container:
-      image: bitnami/git
 
     steps:
       - name: Checkout ${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
