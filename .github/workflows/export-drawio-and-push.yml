@@ -61,7 +61,7 @@ jobs:
           #find ${GITHUB_WORKSPACE}/artifact -name *.svg
 
       - name: Upload svg files that were outputted by drawio-exporter as artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v7
         with:
           name: drawio-artifact
           path: artifact
@@ -84,7 +84,7 @@ jobs:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY_TO_DESTINATION_REPOSITORY }}
           persist-credentials: true
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v8
         with:
           name: drawio-artifact
           path: artifact
@@ -121,7 +121,8 @@ jobs:
 
       - name: Push ${{ github.event.repository.name }} drawio images to ${{ github.event.repository.owner.name }}/${{ github.event.repository.name }} in https://github.com/${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
         if: steps.verify_diff.outputs.changed == 'true'
-        uses: ad-m/github-push-action@master
+        # Pinned to a commit (v1.3.0), because this third-party action runs with the SSH key of the destination repository
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c
         with:
           ssh: true
           repository: ${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}

@@ -37,6 +37,9 @@ MACVLAN_IPXE_GATEWAY="192.168.1.1"
 ### Set dnsmasq's options that iPXE client will use (in .env)
 Set dnsmasq's oprions by using a variable `COMMAND_IPXE_SERVER_CORE`.
 You should set `dhcp-range` and `dhcp-option` at least if you use dnsmasq on `ipxe-server-core` as main DHCP in your network.
+`--dhcp-option=option:dns-server` is required in this case. It is the DNS server that clients will use,
+because dnsmasq in `ipxe-server-core` does not work as a DNS server.
+The DHCP range must not overlap `MACVLAN_IPXE_IP_RANGE`.
 
 * .env
 ```
@@ -86,14 +89,18 @@ You can see the built-in files in [TsutomuNakamura/ipxe-image-server](https://gi
 Restart the container `ipxe-image-server` after you changed them.
 
 ## Run containers
-You can run containers with docker-compose.
+You can run containers with Docker Compose.
 It will run containers `ipxe-server-core` and `ipxe-image-server`.
 
 ```
-docker-compose up
+docker compose up
 ```
 
 Press `Ctrl + c` if your want to stop containers.
+
+## Requirements of clients
+* RAM: about 16 GiB for Ubuntu Server. The installer downloads the whole ISO into memory.
+* UEFI Secure Boot must be disabled, because `ipxe.efi` is not signed.
 
 ## Test iPXE boot with QEMU
 
