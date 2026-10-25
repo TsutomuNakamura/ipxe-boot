@@ -65,6 +65,26 @@ This IP will be used a container `ipxe-image-server` and it should be in the net
 IP_HTTP_NEXT_SERVER=172.31.2.12
 ```
 
+### Customize OS installations (optional)
+`ipxe-image-server` uses its built-in `config.yml`, `boot.ipxe.j2` and `templates/` by default.
+You can override them by putting your own files in `etc/ipxe-image-server/`.
+It is mounted on `/etc/ipxe-image-server` of the container `ipxe-image-server`.
+
+```
+etc/ipxe-image-server/
+├── config.yml      # Menus, autoinstall configs and OS images
+├── boot.ipxe.j2    # Template of the iPXE script
+└── templates/      # Templates of autoinstall configs (cloud-init user-data)
+```
+
+* Each file is optional. Only the files you put there will be overridden.
+* `config.yml` replaces the built-in one entirely, so it must contain all of `menus`, `autoinstalls` and `images`.
+* If you put `templates/`, it replaces all of the built-in templates.
+* Files in this directory except `README.md` are ignored by git, because they may contain passwords or SSH keys.
+
+You can see the built-in files in [TsutomuNakamura/ipxe-image-server](https://github.com/TsutomuNakamura/ipxe-image-server) as examples.
+Restart the container `ipxe-image-server` after you changed them.
+
 ## Run containers
 You can run containers with docker-compose.
 It will run containers `ipxe-server-core` and `ipxe-image-server`.

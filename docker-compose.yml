@@ -34,4 +34,5 @@ services:
         ipv4_address: ${IP_HTTP_NEXT_SERVER}
     volumes:
       - ./os/images:/var/www/os/images
+      - ./etc/ipxe-image-server:/etc/ipxe-image-server:ro
 
