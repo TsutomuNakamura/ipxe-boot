@@ -23,7 +23,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: rlespinasse/drawio-export:v4.15.0
 
@@ -39,7 +39,7 @@ jobs:
           echo github.event.repository.owner.name=${{ github.event.repository.owner.name }}
 
       - name: Checkout ${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: ${{ github.event.repository.name }}
 
@@ -69,11 +69,11 @@ jobs:
   push:
     # The type of runner that the job will run on
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout ${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: ${{ env.dest_repository_owner_name }}/${{ env.dest_repository_name }}
           path: ${{ env.dest_repository_name }}
