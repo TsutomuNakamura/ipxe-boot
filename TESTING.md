@@ -7,6 +7,7 @@ It assumes that:
 
 * The host has a bridge `br0` on the network `172.31.0.0/16`, like `.env`.
 * The network already has a DHCP server (e.g. the router `172.31.0.1`), so `ipxe-server-core` runs in DHCP proxy mode.
+  If it does not, refer to [If your network has no DHCP server](#if-your-network-has-no-dhcp-server).
 * libvirt (`virt-install`, `virsh`) is installed, and you can run it with `sudo`.
 * About 20 GiB of free disk space for the VM and the images.
 
@@ -21,7 +22,27 @@ grep -qx '.env.test' .git/info/exclude || echo '.env.test' >> .git/info/exclude
 grep -n '^COMMAND_IPXE_SERVER_CORE\|^TAG_' .env.test
 ```
 
-Use `.env` instead only if dnsmasq should be the DHCP server of the network.
+Do not run `ipxe-server-core` as a DHCP server in a network that already has one,
+because two DHCP servers would give addresses to the same hosts.
+
+### If your network has no DHCP server
+DHCP proxy mode does not give IP addresses to clients. It only adds boot information to the replies of another DHCP server,
+so clients cannot boot in a network without a DHCP server.
+Run `ipxe-server-core` as the DHCP server instead, with `.env` as it is:
+
+* Skip creating `.env.test`, and use `docker compose` without `--env-file .env.test` in the following steps.
+* Check that `COMMAND_IPXE_SERVER_CORE` in `.env` fits your network.
+
+```bash
+grep -n '^COMMAND_IPXE_SERVER_CORE\|^MACVLAN_IPXE_IP_RANGE' .env
+# COMMAND_IPXE_SERVER_CORE="--dhcp-range=172.31.2.128,172.31.2.255,255.255.0.0 --dhcp-option=option:router,172.31.0.1 --dhcp-option=option:dns-server,8.8.8.8"
+```
+
+| Option | What to set |
+|--------|-------------|
+| `--dhcp-range` | Addresses that no other host uses, outside of `MACVLAN_IPXE_IP_RANGE` (`172.31.2.0/25`) |
+| `--dhcp-option=option:router` | The gateway of the network. Without access to the internet, the installer cannot reach package mirrors, but installs from the ISO |
+| `--dhcp-option=option:dns-server` | Required, because dnsmasq of `ipxe-server-core` does not work as a DNS server. `ipxe-server-core` warns if it is missing |
 
 ### `etc/ipxe-image-server/config.yml`: SSH key and DHCP for the test VM
 Copy the built-in `config.yml` of `ipxe-image-server`. Files in `etc/ipxe-image-server/` are ignored by git.
@@ -129,6 +150,14 @@ for h in $(seq 1 254); do ping -c1 -W1 192.0.2.$h >/dev/null 2>&1 & done; wait
 ip neigh show dev br0 | grep -i 52:54:ff:00:00:01
 
 ssh -i ~/.ssh/id_ed25519 me@<address of the VM>
+```
+
+If `ipxe-server-core` runs as the DHCP server, it logs the addresses that it gives.
+iPXE, the installer and the installed system may get different addresses, so use the last one.
+
+```bash
+docker logs ipxe-server-core | grep 'DHCPACK.*52:54:ff:00:00:01'
+# dnsmasq-dhcp[9]: DHCPACK(eth0) 172.31.2.150 52:54:ff:00:00:01 ipxe-test
 ```
 
 ## 6. Check the installed system
