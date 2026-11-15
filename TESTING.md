@@ -48,7 +48,7 @@ grep -n '^COMMAND_IPXE_SERVER_CORE\|^MACVLAN_IPXE_IP_RANGE' .env
 Copy the built-in `config.yml` of `ipxe-image-server`. Files in `etc/ipxe-image-server/` are ignored by git.
 
 ```bash
-docker run --rm --entrypoint cat tsutomu/ipxe-image-server:v0.6.1 /config.yml > etc/ipxe-image-server/config.yml
+docker run --rm --entrypoint cat tsutomu/ipxe-image-server:v0.6.2 /config.yml > etc/ipxe-image-server/config.yml
 ```
 
 Then replace its `autoinstalls` with the following, and set your public key (e.g. `cat ~/.ssh/id_ed25519.pub`).
