@@ -9,7 +9,8 @@ It assumes that:
 * The network already has a DHCP server (e.g. the router `172.31.0.1`), so `ipxe-server-core` runs in DHCP proxy mode.
   If it does not, refer to [If your network has no DHCP server](#if-your-network-has-no-dhcp-server).
 * libvirt (`virt-install`, `virsh`) is installed, and you can run it with `sudo`.
-* About 20 GiB of free disk space for the VM and the images.
+* About 45 GiB of free disk space: about 25 GiB for the images of the built-in `config.yml`
+  (Ubuntu 22.04, 24.04 and 26.04, server and desktop), and 16 GiB for the VM.
 
 ## 1. Prepare the configuration
 ### `.env.test`: DHCP proxy mode
@@ -87,6 +88,7 @@ docker compose --env-file .env.test config | grep -E 'image:|ip_range|ipv4_addre
 docker compose --env-file .env.test up -d
 docker compose --env-file .env.test ps                    # both containers should be "running"
 docker logs -f ipxe-image-server                           # wait for "Starting nginx", then Ctrl+C
+                                                           # (the first start downloads all images, about 25 GiB)
 docker logs ipxe-server-core | grep -E 'dnsmasq|WARNING'   # "DNS disabled" and "proxy on subnet 172.31.2.11"
 ```
 
@@ -181,8 +183,24 @@ On the console of the VM, you can log in as `me` with the password `p@ssw0rd`. `
 | Advanced options of the menu | "Configure settings", "Drop to iPXE shell" then `exit`, or Esc | The settings screen, the menu without the timeout, or the shell |
 | An error in the configuration | Set a template that does not exist in `config.yml`, then `docker compose --env-file .env.test up -d` | `ipxe-image-server` exits and `docker logs ipxe-image-server` lists the errors |
 | Ubuntu 22.04 | Choose an Ubuntu 22.04 menu | The same flow |
+| Ubuntu 26.04 | Choose "Install Ubuntu 26.04 LTS with autoinstaller (MAC: ...)" | The same flow. `PRETTY_NAME` is `Ubuntu 26.04.1 LTS` |
+| Ubuntu 26.04 desktop | Create the VM with `--ram 24576 --vcpus 4` and `size=40` in step 3, then choose "Install Ubuntu 26.04 LTS desktop (autoinstaller, MAC: ...)" | See [Ubuntu 26.04 desktop](#ubuntu-2604-desktop) |
 
 Remove the VM before you try another case (see the next section), or use another `--name` and disk.
+
+### Ubuntu 26.04 desktop
+The desktop installer uses the same autoinstall config as the server, so it installs without any input and shuts the VM off.
+
+* The desktop ISO is about 6.5 GB and is loaded into memory like the server ISO, so give the VM more memory.
+  The installation was tested with 24 GiB of RAM and a 40 GiB disk.
+* The installation takes about 10 minutes. The installed system starts the GNOME login screen with the user of the config.
+* SSH works in the same way as the server, because `ssh` of the autoinstall config installs `openssh-server`.
+  The network of the config is applied, but NetworkManager manages it instead of systemd-networkd.
+
+```bash
+ssh -i ~/.ssh/id_ed25519 me@<address of the VM> 'systemctl get-default; nmcli -t -f NAME,DEVICE con show --active'
+# graphical.target, and a connection "netplan-lan" ("netplan-" and the id of the interface in "network" of the config)
+```
 
 ## 8. Clean up
 ```bash
